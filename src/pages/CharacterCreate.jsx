@@ -43,8 +43,8 @@ export default function CharacterCreate() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate('/edit', { state: data });
+    // e.preventDefault();
+    // navigate('/edit', { state: data });
   };
 
   return (
