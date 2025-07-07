@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -8,6 +8,7 @@ export default function CharacterEdit() {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const containerRef = useRef(null);
 
   const [data, setData] = useState(location.state || null);
   const [isEditing, setIsEditing] = useState(false);
@@ -44,20 +45,52 @@ export default function CharacterEdit() {
   };
 
   const handleExportPDF = async () => {
-    const container = document.getElementById('character-container');
-    const canvas = await html2canvas(container);
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'pt', 'a4');
-    const width = pdf.internal.pageSize.getWidth();
-    const height = (canvas.height * width) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, width, height);
-    pdf.save(`character_${id}.pdf`);
+    if (!containerRef.current) return;
+    // Inject CSS overrides to force hex colors (avoid oklch from Tailwind)
+    const styleId = 'canvas-overrides';
+    let styleEl = document.getElementById(styleId);
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = styleId;
+      styleEl.innerHTML = `
+        #character-container, #character-container * {
+          background: #ffffff !important;
+          color: #000 !important;
+          border-color: #000 !important;
+        }
+      `;
+      document.head.appendChild(styleEl);
+    }
+
+    try {
+      const canvas = await html2canvas(containerRef.current, {
+        useCORS: true,
+        scale: 2,
+      });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'pt', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`character_${id}.pdf`);
+    } catch (err) {
+      console.error('Erro ao gerar PDF:', err);
+      alert('Não foi possível gerar o PDF. Veja o console para mais detalhes.');
+    } finally {
+      // Remove the override style
+      if (styleEl) document.head.removeChild(styleEl);
+    }
   };
 
   if (loading) return <p>Carregando...</p>;
 
   return (
-    <div id="character-container" className="min-h-screen bg-gray-50 p-6">
+    <div
+      ref={containerRef}
+      id="character-container"
+      className="min-h-screen bg-gray-50 p-6"
+      style={{ backgroundColor: '#ffffff' }}
+    >
       <h1 className="text-3xl font-bold mb-6 text-center">Ficha de Personagem</h1>
       <form className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-lg shadow-md">
         {/* Informações Gerais */}
