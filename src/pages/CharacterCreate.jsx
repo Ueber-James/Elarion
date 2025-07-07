@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createCharacter } from '../api/cliente'; // <-- seu client de API
+
 
 const initialData = {
   name: '',
@@ -37,16 +39,24 @@ export default function CharacterCreate() {
   const [data, setData] = useState(initialData);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
-    setData((prev) => ({ ...prev, [name]: value }));
+    setData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-    // e.preventDefault();
-    // navigate('/edit', { state: data });
+  const handleSubmit = async e => {
+    e.preventDefault();
+    try {
+      // chama seu endpoint POST /api/characters
+      const created = await createCharacter(data);
+      alert(`Personagem "${created.name}" criado com sucesso!`);
+      // redireciona para editar / visualizar o personagem recém-criado:
+      navigate(`/edit/${created.id}`, { state: created });
+    } catch (err) {
+      console.error(err);
+      alert(`Erro ao criar personagem: ${err.message}`);
+    }
   };
-
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <h1 className="text-3xl font-bold mb-6 text-center">Criar Personagem</h1>
@@ -274,7 +284,7 @@ export default function CharacterCreate() {
         </div>
 
         <button type="submit" className="col-span-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">
-          Próxima
+          Criar
         </button>
       </form>
     </div>

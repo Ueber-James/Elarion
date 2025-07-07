@@ -11,7 +11,7 @@ export default function Login() {
   const handleSubmit = e => {
     e.preventDefault();
     // Simulate login and redirect
-    navigate('/criar');
+    navigate('/home');
   };
 
   return (
