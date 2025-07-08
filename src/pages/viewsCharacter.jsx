@@ -97,7 +97,7 @@ export default function CharacterEdit() {
         <div className="col-span-full">
           <h2 className="text-2xl font-semibold mb-4">Informações Gerais</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['name','player','race','class','antecedent','age','genderPronouns','origin','affiliation'].map(field => (
+            {['name','player','race','class','antecedent','age','gender_pronouns','origin','affiliation'].map(field => (
               <input
                 key={field}
                 name={field}
@@ -137,7 +137,7 @@ export default function CharacterEdit() {
         <div className="col-span-full">
           <h2 className="text-2xl font-semibold mb-4">Magia e Poder</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['powerSource','castingForm'].map(field=> (
+            {['power_source','casting_form'].map(field=> (
               <input
                 key={field}
                 name={field}
@@ -148,7 +148,7 @@ export default function CharacterEdit() {
                 className="px-3 py-2 border rounded focus:outline-none focus:ring disabled:opacity-50"
               />
             ))}
-            {['knownSpells','magicSideEffects'].map(field=> (
+            {['known_spells','magic_side_effects'].map(field=> (
               <textarea
                 key={field}
                 name={field}
@@ -165,7 +165,7 @@ export default function CharacterEdit() {
         <div className="col-span-full">
           <h2 className="text-2xl font-semibold mb-4">Equipamentos e Itens</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['initialEquipment','rareItems'].map(field=> (
+            {['initial_equipment','rare_items'].map(field=> (
               <textarea
                 key={field}
                 name={field}
@@ -182,7 +182,7 @@ export default function CharacterEdit() {
         <div className="col-span-full">
           <h2 className="text-2xl font-semibold mb-4">Relações e História</h2>
           <div className="grid grid-cols-1 gap-4">
-            {['eventAt13','allies','enemiesThreats','secrets','forbiddenDesire'].map(field=> (
+            {['event_at_13','allies','enemies_threats','secrets','forbidden_desire'].map(field=> (
               <textarea
                 key={field}
                 name={field}
@@ -199,7 +199,7 @@ export default function CharacterEdit() {
         <div className="col-span-full">
           <h2 className="text-2xl font-semibold mb-4">Camadas de Ceúria</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['celurianAlignment','magicAccessLevel','lumenitaRelation'].map(field=> (
+            {['celurian_alignment','magic_access_level','lumenita_relation'].map(field=> (
               <input
                 key={field}
                 name={field}
@@ -207,7 +207,7 @@ export default function CharacterEdit() {
                 value={data[field]||''}
                 onChange={handleChange}
                 disabled={!isEditing}
-                className={field==='lumenitaRelation' ?
+                className={field==='lumenita_relation' ?
                   "col-span-full px-3 py-2 border rounded focus:outline-none focus:ring disabled:opacity-50" :
                   "px-3 py-2 border rounded focus:outline-none focus:ring disabled:opacity-50"}
               />
