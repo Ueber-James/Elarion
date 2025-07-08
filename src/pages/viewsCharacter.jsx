@@ -106,7 +106,7 @@ export default function CharacterEdit() {
                 value={data[field]||''}
                 onChange={handleChange}
                 disabled={!isEditing}
-                className="px-3 py-2 border rounded focus:outline-none focus:ring disabled:opacity-50  h-24"
+                className="px-3 py-2 border rounded focus:outline-none focus:ring disabled:opacity-50  h-18"
               />
             ))}
           </div>
