@@ -31,18 +31,24 @@ export default function CharacterEdit() {
   };
 
   const toggleEdit = async () => {
-    if (isEditing) {
-      try {
-        const updated = await updateCharacter(id, data);
-        setData(updated);
-        alert('Personagem atualizado!');
-      } catch (err) {
-        console.error(err);
-        alert(`Erro ao atualizar: ${err.message}`);
-      }
+  if (!isEditing) {
+    const tentativa = window.prompt('Digite a senha de edição:');
+    if (tentativa !== data.edit_password) {
+      return alert('Senha incorreta. Você não pode editar esta ficha.');
     }
-    setIsEditing(edit => !edit);
-  };
+    setIsEditing(true);
+  } else {
+    try {
+      const updated = await updateCharacter(id, data);
+      setData(updated);
+      alert('Personagem atualizado!');
+    } catch (err) {
+      console.error(err);
+      alert(`Erro ao atualizar: ${err.message}`);
+    }
+    setIsEditing(false);
+  }
+};
 
   const handleExportPDF = async () => {
     if (!containerRef.current) return;
